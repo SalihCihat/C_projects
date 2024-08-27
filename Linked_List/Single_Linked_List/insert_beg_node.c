@@ -1,46 +1,73 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+
 
 struct Node {
 
     int data;
-    struct Node* next;    
-
+    struct Node* next;
 };
 
-struct Node* head; //global variable
-void Insert(int x)
-{
-    struct Node* temp = (struct Node*)malloc(sizeof(struct Node));
-    temp -> data = x;
-    temp -> next = head;
-    head = temp;
+void insertAtBeginning(struct Node** head, int new_data) {
 
+    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+
+    new_node -> data = new_data;
+
+    new_node -> next = (*head);
+
+    (*head) = new_node;
 }
 
-void Print()
-{
-    struct Node* temp = head;
-    printf("List is: ");
-    while(temp != NULL){
-        printf(" %d", temp -> data);
-        temp = temp -> next;    
+void insertAtEnding(struct Node** head, int new_data) {
+
+    struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+
+    new_node -> data = new_data;
+
+    new_node -> next = NULL;
+
+    if(*head == NULL){
+        *head = new_node;
+        return;
     }
-    printf("\n");
+
+    struct Node* last = *head;
+    while(last -> next != NULL){
+        last = last -> next;
+    }
+
+    last -> next = new_node;
 }
 
+void printList(struct Node* head) {
 
-int main() {
+    struct Node* temp = head;
+    while(temp != NULL) {
+        printf("%d -> ", temp -> data);
+        temp = temp -> next;
+    }
+    printf("NULL\n");
+}
 
-    head = NULL; //empty list
-    printf("How many numbers?\n");
-    int n, i, x;
-    scanf("%d", &n);
+int main(){
+    
+    struct Node* head = NULL;
 
-    for( i = 0 ; i < n; i++){
-        printf("Enter the number \n");
-        scanf("%d", &x);
-        Insert(x);
-        Print();
-        }
+    insertAtBeginning(&head, 1);
+    insertAtBeginning(&head, 2);
+    insertAtEnding(&head, 3);
+
+
+    printList(head);
+
+    struct Node* temp;
+    while(head != NULL) {
+        temp = head;
+        head = head -> next;
+        free(temp);
+    }    
+
+
+    return 0;
 }
